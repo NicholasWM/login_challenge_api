@@ -1,23 +1,30 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { SequelizeModule } from '@nestjs/sequelize';
+import { User } from './user/user.model';
 import { UserModule } from './user/user.module';
+import { AuthModule } from './auth/auth.module';
+import { MulterModule } from '@nestjs/platform-express';
 
 @Module({
   imports: [
+    MulterModule.register({
+      dest: '../../upload',
+    }),
     SequelizeModule.forRoot({
       dialect: 'postgres',
-      host: 'localhost',
-      port: 3306,
+      host: 'db_lca',
+      port: 5432,
       username: 'root',
       password: 'root',
-      database: 'test',
-      models: [],
+      database: 'login_challenge',
+      models: [User],
+      autoLoadModels: true,
+      synchronize: true,
     }),
     UserModule,
+    AuthModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}

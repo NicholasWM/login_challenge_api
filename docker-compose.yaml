@@ -1,0 +1,54 @@
+version: "2"
+
+services:
+  api:
+    container_name: login_challenge_api
+    restart: always
+    build: .
+    environment:
+      - APP_ENV=development
+      - APP_PORT=4000
+    volumes:
+      - ./src:/var/www/backend/src
+      - ./test:/var/www/backend/test
+      - ./uploads:/var/www/backend/uploads
+    working_dir: /var/www/backend
+    ports:
+      - "4000:3000"
+    links:
+      - db_postgres
+    depends_on:
+      - db_postgres
+
+  db_postgres: # Example Service
+    image: postgres:alpine
+    ports:
+      - "4001:3306"
+    container_name: db_lca
+    restart: always
+    environment:
+      TZ: '-03'
+      PGTZ: '-03'
+      POSTGRES_DB: login_challenge
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      
+    volumes:
+      - api_data:/var/lib/postgresql/data
+
+  adminer:
+    container_name: 'api_lca_adminer'
+    image: adminer
+    restart: always
+    ports:
+      - 4002:8080
+    depends_on: 
+      - db_postgres
+
+volumes:
+  api_data:
+
+networks:
+  default:
+    external:
+      name: api
