@@ -8,9 +8,11 @@ import { User } from 'src/user/user.model';
 import { JwtStrategy } from './jwt.strategy';
 import { SECRET } from 'src/config';
 import { AuthProvider } from './auth.provider';
+import { ImagesModule } from 'src/images/images.module';
 
 @Module({
   imports: [
+    ImagesModule,
     SequelizeModule.forFeature([User]),
     PassportModule,
     JwtModule.register({

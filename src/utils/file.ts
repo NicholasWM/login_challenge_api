@@ -1,5 +1,8 @@
 import * as fs from 'fs';
 
+export const getImagePath = (filename: string) =>
+  `${process.cwd()}/uploads/${filename}`;
+
 export const deleteFile = async (filename: string) => {
   try {
     await fs.promises.stat(filename);

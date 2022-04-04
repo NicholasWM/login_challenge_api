@@ -9,19 +9,18 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { CreateUserDTO } from 'src/user/dtos/create-user.dto';
+import { options } from 'src/config/upload';
+import { ImagesService } from 'src/images/images.service';
 import { AuthService } from './auth.service';
 import { SignInDTO } from './dtos/sign-in-dto';
-import * as fs from 'fs';
-import * as FormData from 'form-data';
-import path = require('path');
-import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
-import { options } from 'src/config/upload';
-import { ImgBBResponse } from 'src/interfaces/imgBB.interface';
 
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly imagesService: ImagesService,
+  ) {}
 
   @Post('/signin')
   async signin(@Body(ValidationPipe) signInDTO: SignInDTO) {
@@ -53,28 +52,13 @@ export class AuthController {
     @Body(ValidationPipe) createUserDTO: CreateUserDTO,
     @UploadedFile() file: Express.Multer.File,
   ) {
-    // ):Promise<SignUpResponse> {
-    const imagePath = `${process.cwd()}/uploads/${file.filename}`;
-
-    const data = new FormData();
-    data.append('key', '76a90c4470db56d9bdaa4bd4e03d222c');
-    data.append('image', fs.createReadStream(imagePath));
-
-    const config: AxiosRequestConfig = {
-      method: 'POST',
-      url: 'https://api.imgbb.com/1/upload',
-      headers: {
-        ...data.getHeaders(),
-      },
-      data: data,
-    };
     try {
-      const response: AxiosResponse<ImgBBResponse> = await axios(config);
-      const { url } = response.data.data;
       const user = await this.authService.signUp({
         ...createUserDTO,
         imageName: file.filename,
-        imageExternalUrl: url,
+        imageExternalUrl: await this.imagesService.uploadImageToImgBB(
+          file.filename,
+        ),
       });
       if (!user) {
         return { message: 'Email already exists!' };
