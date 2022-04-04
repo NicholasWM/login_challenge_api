@@ -49,6 +49,15 @@ export class AuthService {
     };
     const token = this.jwtService.sign(jwtPayload);
 
-    return { id: user.id, name: user.name, email: user.email, token };
+    return {
+      id: user.id,
+      name: user.name,
+      hasPermission: user.hasPermission,
+      email: user.email,
+      phoneNumber: user.phoneNumber,
+      imageExternalUrl: user.imageExternalUrl,
+      imageName: user.imageName,
+      token,
+    };
   }
 }
