@@ -8,18 +8,13 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
-import { diskStorage } from 'multer';
-import { extname } from 'path';
 import { CreateUserDTO } from 'src/user/dtos/create-user.dto';
 import { AuthService } from './auth.service';
 import { SignInDTO } from './dtos/sign-in-dto';
-import * as crypto from 'crypto';
 import * as fs from 'fs';
 import * as FormData from 'form-data';
-import fetch, { Response } from 'node-fetch';
 import path = require('path');
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
-import { imageFileFilter } from 'src/utils/file';
 import { options } from 'src/config/upload';
 import { ImgBBResponse } from 'src/interfaces/imgBB.interface';
 
@@ -27,19 +22,7 @@ import { ImgBBResponse } from 'src/interfaces/imgBB.interface';
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
-  // @Post('/signUp')
-  // async signUp(
-  //   @Body(ValidationPipe) createUserDTO: CreateUserDTO,
-  // ): Promise<SignUpResponse> {
-  //   const user = await this.authService.signUp(createUserDTO);
-  //   if (!user) {
-  //     return { message: 'Email already exists!' };
-  //   }
-  //   return {
-  //     user,
-  //     message: 'Created!',
-  //   };
-  // }
+
   @Post('/signin')
   async signin(@Body(ValidationPipe) signInDTO: SignInDTO) {
     return await this.authService.signIn(signInDTO);
@@ -58,7 +41,7 @@ export class AuthController {
         phoneNumber: { type: 'string' },
         hasPermission: { type: 'boolean' },
         file: {
-          // type: 'string',
+          type: 'string',
           format: 'binary',
         },
       },

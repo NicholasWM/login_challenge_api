@@ -1,3 +1,4 @@
+import * as fs from 'fs';
 import {
   Body,
   Controller,
@@ -15,7 +16,13 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiConsumes,
+  ApiParam,
+  ApiTags,
+} from '@nestjs/swagger';
 import { options } from 'src/config/upload';
 import { DeleteUserDTO } from './dtos/delete-user.dto';
 import { UpdateUserDTO } from './dtos/update-user.dto';
@@ -24,7 +31,6 @@ import { UserService } from './user.service';
 
 @ApiTags('Users')
 @ApiBearerAuth()
-// @UseGuards(AuthGuard('jwt'))
 @Controller('user')
 export class UserController {
   constructor(private userService: UserService) {}
@@ -35,6 +41,7 @@ export class UserController {
     return users;
   }
 
+  @ApiParam({ name: 'userId', type: 'number', required: true })
   @Get('image/:userId')
   async getImage(@Param('userId') id, @Res() res) {
     const user = await this.userService.findById(id);

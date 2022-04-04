@@ -35,7 +35,6 @@ export class AuthService {
         imageExternalUrl,
         imageName,
       } = signUpServiceDTO;
-      console.log(signUpServiceDTO);
       const salt = await bcrypt.genSalt();
       const user = await this.userModel.create({
         email,
@@ -103,6 +102,7 @@ export class AuthService {
     const jwtPayload = {
       id: user.id,
       name: user.name,
+      email: user.email,
     };
     const token = this.jwtService.sign(jwtPayload);
 
