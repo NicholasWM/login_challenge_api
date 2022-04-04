@@ -7,6 +7,7 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { User } from 'src/user/user.model';
 import { JwtStrategy } from './jwt.strategy';
 import { SECRET } from 'src/config';
+import { AuthProvider } from './auth.provider';
 
 @Module({
   imports: [
@@ -20,7 +21,7 @@ import { SECRET } from 'src/config';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy],
+  providers: [AuthService, JwtStrategy, AuthProvider],
   exports: [AuthService],
 })
 export class AuthModule {}

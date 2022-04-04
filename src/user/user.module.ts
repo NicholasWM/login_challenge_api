@@ -3,11 +3,12 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { AuthMiddleware } from 'src/middlewares/auth.middleware';
 import { UserController } from './user.controller';
 import { User } from './user.model';
+import { UserProvider } from './user.provider';
 import { UserService } from './user.service';
 
 @Module({
   imports: [SequelizeModule.forFeature([User])],
-  providers: [UserService],
+  providers: [UserService, UserProvider],
   controllers: [UserController],
   exports: [UserService],
 })
