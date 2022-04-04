@@ -55,10 +55,10 @@ export class AuthController {
     try {
       const user = await this.authService.signUp({
         ...createUserDTO,
-        imageName: file.filename,
-        imageExternalUrl: await this.imagesService.uploadImageToImgBB(
-          file.filename,
-        ),
+        imageName: file?.filename || '',
+        imageExternalUrl: file
+          ? await this.imagesService.uploadImageToImgBB(file.filename)
+          : '',
       });
       if (!user) {
         return { message: 'Email already exists!' };
