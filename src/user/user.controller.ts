@@ -9,6 +9,7 @@ import {
   Post,
   Put,
   Res,
+  UnauthorizedException,
   UploadedFile,
   UseGuards,
   UseInterceptors,
@@ -28,6 +29,8 @@ import { DeleteUserDTO } from './dtos/delete-user.dto';
 import { UpdateUserDTO } from './dtos/update-user.dto';
 import { User } from './user.model';
 import { UserService } from './user.service';
+import { GetUser } from 'src/auth/get-user.decorator';
+// import { GetUser } from 'src/auth/get-user.decorator';
 
 @ApiTags('Users')
 @ApiBearerAuth()
@@ -97,13 +100,17 @@ export class UserController {
 
   @Delete()
   async remove(
+    @GetUser() user: User,
     @Body(ValidationPipe) deleteUserDTO: DeleteUserDTO,
   ): Promise<any> {
+    if (user.id !== deleteUserDTO.id) {
+      throw new UnauthorizedException();
+    }
     try {
       await this.userService.remove(deleteUserDTO.id);
-      return { message: 'User has been deleted!' };
+      return { message: 'User has been deleted!', status: HttpStatus.OK };
     } catch (error) {
-      return { message: 'An error ocurred to delete user' };
+      return error;
     }
   }
 }

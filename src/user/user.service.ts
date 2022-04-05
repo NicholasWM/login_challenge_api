@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
+import { deleteFile } from 'src/utils/file';
 import { UpdateUserDTO } from './dtos/update-user.dto';
 import { User } from './user.model';
 import { UserProvider } from './user.provider';
@@ -32,6 +33,9 @@ export class UserService {
 
   async remove(id: number): Promise<void> {
     const user = await this.userModel.findByPk(id);
+    if (user.imageName) {
+      deleteFile(user.imageName);
+    }
     await user.destroy();
   }
 }

@@ -51,8 +51,6 @@ export class UserProvider {
       return null;
     }
     Object.keys(updateUserDTO).forEach(async (item) => {
-      console.log(`${item} => ${user[item]} = ${updateUserDTO[item]}`);
-      const exclude = ['password', 'password', 'passwordConfirmation', 'id'];
       const simpleFields = ['hasPermission', 'name', 'phoneNumber'];
       if (
         item === 'password' &&
@@ -67,7 +65,6 @@ export class UserProvider {
           where: { email: updateUserDTO.email },
         });
         if (!rows.length) {
-          console.log('Updating Email');
           user.email = updateUserDTO[item];
           user.save();
         }
