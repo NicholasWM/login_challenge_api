@@ -1,6 +1,6 @@
+import * as bcrypt from 'bcrypt';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import * as bcrypt from 'bcrypt';
 
 import { SignUpServiceDTO } from 'src/interfaces/auth.interface';
 import { User } from 'src/user/user.model';
@@ -41,6 +41,7 @@ export class AuthProvider {
       phoneNumber: user.phoneNumber,
       id: user.id,
       imageExternalUrl,
+      imageName,
     };
   }
 

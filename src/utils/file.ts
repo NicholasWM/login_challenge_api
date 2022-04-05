@@ -5,11 +5,11 @@ export const getImagePath = (filename: string) =>
 
 export const deleteFile = async (filename: string) => {
   try {
-    await fs.promises.stat(filename);
+    await fs.promises.stat(`./uploads/${filename}`);
   } catch (error) {
     return;
   }
-  await fs.promises.unlink(filename);
+  await fs.promises.unlink(`./uploads/${filename}`);
 };
 
 export const imageFileFilter = (req, file, callback) => {

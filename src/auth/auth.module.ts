@@ -9,12 +9,14 @@ import { JwtStrategy } from './jwt.strategy';
 import { SECRET } from 'src/config';
 import { AuthProvider } from './auth.provider';
 import { ImagesModule } from 'src/images/images.module';
+import { UserModule } from 'src/user/user.module';
 
 @Module({
   imports: [
+    UserModule,
     ImagesModule,
     SequelizeModule.forFeature([User]),
-    PassportModule,
+    PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({
       secret: SECRET,
       signOptions: {

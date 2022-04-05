@@ -20,11 +20,12 @@ export class UserService {
     return await this.userProvider.findById(id);
   }
 
-  async update(updateUserDTO: UpdateUserDTO) {
+  async update(updateUserDTO: UpdateUserDTO, filename: string) {
     try {
-      await this.userProvider.updateOne(updateUserDTO);
+      await this.userProvider.updateOne(updateUserDTO, filename);
       return true;
     } catch (error) {
+      console.log(error);
       throw new Error('Error to update user!');
     }
   }

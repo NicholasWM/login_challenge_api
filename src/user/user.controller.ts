@@ -31,6 +31,7 @@ import { UserService } from './user.service';
 
 @ApiTags('Users')
 @ApiBearerAuth()
+@UseGuards(AuthGuard())
 @Controller('user')
 export class UserController {
   constructor(private userService: UserService) {}
@@ -67,7 +68,7 @@ export class UserController {
         passwordConfirmation: { type: 'string' },
         phoneNumber: { type: 'string' },
         hasPermission: { type: 'boolean' },
-        image: {
+        file: {
           type: 'string',
           format: 'binary',
           nullable: false,
@@ -79,13 +80,17 @@ export class UserController {
   @Put()
   async updateUser(
     @Body(ValidationPipe) updateUserDTO: UpdateUserDTO,
+    @UploadedFile() file: Express.Multer.File,
   ): Promise<any> {
-    if (await this.userService.update(updateUserDTO)) {
+    // console.log(file.filename);
+    if (await this.userService.update(updateUserDTO, file?.filename)) {
       return {
+        status: HttpStatus.OK,
         message: 'User is updated!',
       };
     }
     return {
+      status: HttpStatus.BAD_REQUEST,
       message: 'Error to update user!',
     };
   }

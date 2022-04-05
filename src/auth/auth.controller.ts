@@ -1,18 +1,23 @@
 import {
   Body,
   Controller,
+  Get,
   Post,
   UploadedFile,
+  UseGuards,
   UseInterceptors,
   ValidationPipe,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { CreateUserDTO } from 'src/user/dtos/create-user.dto';
 import { options } from 'src/config/upload';
 import { ImagesService } from 'src/images/images.service';
 import { AuthService } from './auth.service';
 import { SignInDTO } from './dtos/sign-in-dto';
+import { AuthGuard } from '@nestjs/passport';
+import { User } from 'src/user/user.model';
+import { GetUser } from './get-user.decorator';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -70,5 +75,12 @@ export class AuthController {
     } catch (error) {
       throw new Error(error);
     }
+  }
+
+  @Get('/me')
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard())
+  getMe(@GetUser() user: User): User {
+    return user;
   }
 }

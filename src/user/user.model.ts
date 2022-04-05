@@ -14,7 +14,7 @@ export interface UserAttributes {
   email: string;
   phoneNumber: string;
   password?: string;
-  hasPermission: boolean;
+  hasPermission?: boolean;
   salt?: string;
   imageName?: string;
   imageExternalUrl?: string;
