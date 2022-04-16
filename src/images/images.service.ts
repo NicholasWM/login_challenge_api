@@ -12,7 +12,7 @@ export class ImagesService {
       const imagePath = getImagePath(filename);
 
       const data = new FormData();
-      data.append('key', '76a90c4470db56d9bdaa4bd4e03d222c');
+      data.append('key', '<YOUR_IMAGE_BB_KEY>');
       data.append('image', fs.createReadStream(imagePath));
 
       const config: AxiosRequestConfig = {
