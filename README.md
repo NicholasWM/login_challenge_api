@@ -1,3 +1,10 @@
+# This project serves [Login Challenge Front](https://github.com/NicholasWM/login_challenge_front) .
+
+# To run this backend:
+```bash
+$ docker-compose up -d --build
+```
+
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
 </p>
